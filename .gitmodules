@@ -1,0 +1,7 @@
+[submodule "lib/cglm"]
+	path = lib/cglm
+	url = git@github.com:recp/cglm.git
+[submodule "lib/sdl"]
+	path = lib/sdl
+	url = git@github.com:libsdl-org/SDL.git
+  branch = SDL2
