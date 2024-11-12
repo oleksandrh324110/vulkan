@@ -15,10 +15,10 @@ void create_instance(SDL_Window *window) {
                                 .engineVersion = VK_MAKE_VERSION(1, 0, 0),
                                 .apiVersion = VK_API_VERSION_1_0};
 
+  *(int *)0 = 0;
   uint32_t sdl_extension_count;
   SDL_Vulkan_GetInstanceExtensions(NULL, &sdl_extension_count, NULL);
-  const char **sdl_extensions =
-      malloc(++sdl_extension_count * (sizeof(char *)));
+  const char **sdl_extensions = malloc(++sdl_extension_count * sizeof(char *));
   SDL_Vulkan_GetInstanceExtensions(NULL, &sdl_extension_count, sdl_extensions);
   sdl_extensions[sdl_extension_count++] =
       VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME;
