@@ -14,9 +14,9 @@ int main(int argc, char *argv[]) {
 
   SDL_Vulkan_LoadLibrary(NULL);
 
-  SDL_Window *window = SDL_CreateWindow(
-      "Hello, Vulkan!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 720,
-      480, SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE);
+  SDL_Window *window =
+      SDL_CreateWindow("Vulkan", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+                       720, 480, SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE);
 
   vulkan_init(window);
 
