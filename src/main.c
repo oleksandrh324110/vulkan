@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
       "Hello, Vulkan!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 720,
       480, SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE);
 
-  vulkan_init();
+  vulkan_init(window);
 
   SDL_Event event;
   int running = true;
