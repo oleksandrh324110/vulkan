@@ -1,13 +1,13 @@
-#include <stdio.h>
+#include "./create_instance.h"
 
 #include <SDL_vulkan.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <vulkan/vulkan.h>
-#include <vulkan/vulkan_core.h>
 
-extern VkInstance instance;
-extern SDL_Window *window;
-
-void create_instance(SDL_Window *window) {
+void create_instance() {
   VkApplicationInfo app_info = {.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO,
                                 .pApplicationName = "Hello Triangle",
                                 .applicationVersion = VK_MAKE_VERSION(1, 0, 0),
@@ -15,7 +15,6 @@ void create_instance(SDL_Window *window) {
                                 .engineVersion = VK_MAKE_VERSION(1, 0, 0),
                                 .apiVersion = VK_API_VERSION_1_0};
 
-  *(int *)0 = 0;
   uint32_t sdl_extension_count;
   SDL_Vulkan_GetInstanceExtensions(NULL, &sdl_extension_count, NULL);
   const char **sdl_extensions = malloc(++sdl_extension_count * sizeof(char *));
@@ -25,6 +24,30 @@ void create_instance(SDL_Window *window) {
 
   for (size_t i = 0; i < sdl_extension_count; i++)
     printf("%s\n", sdl_extensions[i]);
+  printf("\n");
+
+  uint32_t extension_count;
+  vkEnumerateInstanceExtensionProperties(NULL, &extension_count, NULL);
+  VkExtensionProperties extensions[extension_count];
+  vkEnumerateInstanceExtensionProperties(NULL, &extension_count, extensions);
+
+  for (size_t i = 0; i < extension_count; i++)
+    printf("%s\n", extensions[i].extensionName);
+  printf("\n");
+
+  for (size_t i = 0; i < sdl_extension_count; i++) {
+    bool found = false;
+    for (size_t j = 0; j < extension_count; j++) {
+      if (!strcmp(sdl_extensions[i], extensions[j].extensionName)) {
+        found = true;
+        break;
+      }
+    }
+    if (!found) {
+      fprintf(stderr, "extension %s wasn't found\n", sdl_extensions[i]);
+      exit(1);
+    }
+  }
 
   VkInstanceCreateInfo create_info = {
       .sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
@@ -38,4 +61,6 @@ void create_instance(SDL_Window *window) {
     fprintf(stderr, "failed to create instance!\n");
     exit(1);
   }
+
+  free(sdl_extensions);
 }
