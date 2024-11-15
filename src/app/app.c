@@ -1,6 +1,11 @@
-#include <SDL.h>
-
 #include "app.h"
+
+#include <SDL.h>
+#include <SDL_vulkan.h>
+#include <stdbool.h>
+#include <vulkan/vulkan.h>
+
+#include "./vulkan/create_instance.h"
 
 VkInstance instance;
 SDL_Window *window;
@@ -14,13 +19,12 @@ void app_run() {
 
 void window_init() {
   SDL_Init(SDL_INIT_VIDEO);
-
   SDL_Vulkan_LoadLibrary(NULL);
-
   window =
       SDL_CreateWindow("Vulkan", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                        720, 480, SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE);
 }
+
 void vulkan_init() { create_instance(); }
 
 void main_loop() {
@@ -43,4 +47,7 @@ void main_loop() {
   }
 }
 
-void clean() { vkDestroyInstance(instance, NULL); }
+void clean() {
+  vkDestroyInstance(instance, NULL);
+  SDL_Quit();
+}
