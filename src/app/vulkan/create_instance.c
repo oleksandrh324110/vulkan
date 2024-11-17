@@ -1,6 +1,3 @@
-#include "./create_instance.h"
-#include "./setup_debug_messenger.h"
-
 #include <SDL_vulkan.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -8,6 +5,9 @@
 #include <string.h>
 #include <vulkan/vulkan.h>
 #include <vulkan/vulkan_core.h>
+
+#include "create_instance.h"
+#include "setup_debug_messenger.h"
 
 const char *validation_layers[] = {"VK_LAYER_KHRONOS_validation"};
 const uint32_t validation_layer_count =
@@ -88,7 +88,7 @@ const char **get_required_extensions(uint32_t *extension_count) {
   if (enable_validation_layers)
     sdl_extension_count += validation_layer_count;
 
-  const char **extensions = malloc(sdl_extension_count * sizeof(char *));
+  const char **extensions = malloc(sdl_extension_count * sizeof(const char *));
   SDL_Vulkan_GetInstanceExtensions(NULL, &sdl_extension_count, extensions);
   extensions[sdl_extension_count++] =
       VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME;

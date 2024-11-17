@@ -3,10 +3,13 @@
 #include <SDL.h>
 #include <SDL_vulkan.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include <vulkan/vulkan.h>
 
-#include "./vulkan/create_instance.h"
-#include "./vulkan/setup_debug_messenger.h"
+#include "SDL_keycode.h"
+#include "vulkan/create_instance.h"
+#include "vulkan/pick_physical_device.h"
+#include "vulkan/setup_debug_messenger.h"
 
 #ifdef NDEBUG
 const bool enable_validation_layers = false;
@@ -57,6 +60,7 @@ void main_loop() {
     }
 
     // code here
+    SDL_Delay(1);
   }
 }
 
