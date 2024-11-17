@@ -1,4 +1,5 @@
 #include "./create_instance.h"
+#include "./setup_debug_messenger.h"
 
 #include <SDL_vulkan.h>
 #include <stdbool.h>
@@ -8,20 +9,16 @@
 #include <vulkan/vulkan.h>
 #include <vulkan/vulkan_core.h>
 
-const char *validationLayers[] = {"VK_LAYER_KHRONOS_validation"};
-const uint32_t validationLayerCount =
-    sizeof(validationLayers) / sizeof(validationLayers[0]);
+const char *validation_layers[] = {"VK_LAYER_KHRONOS_validation"};
+const uint32_t validation_layer_count =
+    sizeof(validation_layers) / sizeof(validation_layers[0]);
 
-#ifdef NDEBUG
-const bool enableValidationLayers = false;
-#else
-const bool enableValidationLayers = true;
-#endif
+extern const bool enable_validation_layers;
 
 extern VkInstance instance;
 
 void create_instance() {
-  if (enableValidationLayers && !checkValidationLayerSupport()) {
+  if (enable_validation_layers && !check_validation_layer_support()) {
     fprintf(stderr, "validation layers requested, but not available!\n");
     exit(1);
   }
@@ -34,45 +31,24 @@ void create_instance() {
                                 .apiVersion = VK_API_VERSION_1_0};
 
   uint32_t extension_count;
-  const char **extensions = getRequiredExtensions(&extension_count);
-
-  for (size_t i = 0; i < extension_count; i++)
-    printf("%s\n", extensions[i]);
-  printf("\n");
-
-  /*uint32_t extension_count;*/
-  /*vkEnumerateInstanceExtensionProperties(NULL, &extension_count, NULL);*/
-  /*VkExtensionProperties extensions[extension_count];*/
-  /*vkEnumerateInstanceExtensionProperties(NULL, &extension_count,
-   * extensions);*/
-
-  /*for (size_t i = 0; i < extension_count; i++)*/
-  /*  printf("%s\n", extensions[i].extensionName);*/
-  /*printf("\n");*/
-
-  /*for (size_t i = 0; i < sdl_extension_count; i++) {*/
-  /*  bool found = false;*/
-  /*  for (size_t j = 0; j < extension_count; j++) {*/
-  /*    if (!strcmp(sdl_extensions[i], extensions[j].extensionName)) {*/
-  /*      found = true;*/
-  /*      break;*/
-  /*    }*/
-  /*  }*/
-  /*  if (!found) {*/
-  /*    fprintf(stderr, "extension %s wasn't found\n", sdl_extensions[i]);*/
-  /*    exit(1);*/
-  /*  }*/
-  /*}*/
+  const char **extensions = get_required_extensions(&extension_count);
 
   VkInstanceCreateInfo create_info = {
       .sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
       .pApplicationInfo = &app_info,
       .enabledExtensionCount = extension_count,
       .ppEnabledExtensionNames = extensions,
-      .enabledLayerCount = 0};
-  if (enableValidationLayers) {
-    create_info.enabledLayerCount = validationLayerCount;
-    create_info.ppEnabledLayerNames = validationLayers;
+      .enabledLayerCount = 0,
+      .pNext = NULL};
+
+  VkDebugUtilsMessengerCreateInfoEXT debug_create_info;
+  if (enable_validation_layers) {
+    create_info.enabledLayerCount = validation_layer_count;
+    create_info.ppEnabledLayerNames = validation_layers;
+
+    populate_debug_messenger_create_info(&debug_create_info);
+    create_info.pNext =
+        (VkDebugUtilsMessengerCreateInfoEXT *)&debug_create_info;
   }
   create_info.flags |= VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
 
@@ -84,16 +60,16 @@ void create_instance() {
   free(extensions);
 }
 
-bool checkValidationLayerSupport() {
-  uint32_t layerCount;
-  vkEnumerateInstanceLayerProperties(&layerCount, NULL);
-  VkLayerProperties availableLayers[layerCount];
-  vkEnumerateInstanceLayerProperties(&layerCount, availableLayers);
+bool check_validation_layer_support() {
+  uint32_t layer_count;
+  vkEnumerateInstanceLayerProperties(&layer_count, NULL);
+  VkLayerProperties available_layers[layer_count];
+  vkEnumerateInstanceLayerProperties(&layer_count, available_layers);
 
-  for (size_t i = 0; i < validationLayerCount; i++) {
+  for (size_t i = 0; i < validation_layer_count; i++) {
     bool found = false;
-    for (size_t j = 0; j < layerCount; j++) {
-      if (!strcmp(validationLayers[i], availableLayers[j].layerName)) {
+    for (size_t j = 0; j < layer_count; j++) {
+      if (!strcmp(validation_layers[i], available_layers[j].layerName)) {
         found = true;
         break;
       }
@@ -105,23 +81,23 @@ bool checkValidationLayerSupport() {
   return true;
 }
 
-const char **getRequiredExtensions(uint32_t *extension_count) {
+const char **get_required_extensions(uint32_t *extension_count) {
   uint32_t sdl_extension_count;
   SDL_Vulkan_GetInstanceExtensions(NULL, &sdl_extension_count, NULL);
   sdl_extension_count++;
-  if (enableValidationLayers)
-    sdl_extension_count += validationLayerCount;
+  if (enable_validation_layers)
+    sdl_extension_count += validation_layer_count;
 
-  const char **sdl_extensions = malloc(sdl_extension_count * sizeof(char *));
-  SDL_Vulkan_GetInstanceExtensions(NULL, &sdl_extension_count, sdl_extensions);
-  sdl_extensions[sdl_extension_count++] =
+  const char **extensions = malloc(sdl_extension_count * sizeof(char *));
+  SDL_Vulkan_GetInstanceExtensions(NULL, &sdl_extension_count, extensions);
+  extensions[sdl_extension_count++] =
       VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME;
-  if (enableValidationLayers)
-    sdl_extension_count += validationLayerCount;
+  if (enable_validation_layers)
+    sdl_extension_count += validation_layer_count;
 
-  if (enableValidationLayers)
-    sdl_extensions[sdl_extension_count - 1] = VK_EXT_DEBUG_UTILS_EXTENSION_NAME;
+  if (enable_validation_layers)
+    extensions[sdl_extension_count - 1] = VK_EXT_DEBUG_UTILS_EXTENSION_NAME;
 
   *extension_count = sdl_extension_count;
-  return sdl_extensions;
+  return extensions;
 }

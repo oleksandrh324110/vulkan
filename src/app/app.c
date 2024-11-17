@@ -6,15 +6,24 @@
 #include <vulkan/vulkan.h>
 
 #include "./vulkan/create_instance.h"
+#include "./vulkan/setup_debug_messenger.h"
+
+#ifdef NDEBUG
+const bool enable_validation_layers = false;
+#else
+const bool enable_validation_layers = true;
+#endif
 
 VkInstance instance;
+VkDebugUtilsMessengerEXT debug_messenger;
+
 SDL_Window *window;
 
 void app_run() {
   window_init();
   vulkan_init();
   main_loop();
-  clean();
+  cleanup();
 }
 
 void window_init() {
@@ -25,7 +34,11 @@ void window_init() {
                        720, 480, SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE);
 }
 
-void vulkan_init() { create_instance(); }
+void vulkan_init() {
+  create_instance();
+  setup_debug_messenger();
+  pick_physical_device();
+}
 
 void main_loop() {
   SDL_Event event;
@@ -47,7 +60,9 @@ void main_loop() {
   }
 }
 
-void clean() {
+void cleanup() {
+  if (enable_validation_layers)
+    destroy_debug_utils_messenger_ext(instance, debug_messenger, NULL);
   vkDestroyInstance(instance, NULL);
   SDL_Quit();
 }

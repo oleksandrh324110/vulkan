@@ -6,6 +6,7 @@ if($ENV{WSL})
   set(CMAKE_CXX_COMPILER "x86_64-w64-mingw32-g++")
 endif()
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 set(CMAKE_BUILD_TYPE Debug)
 
 project(vulkan)
