@@ -24,7 +24,6 @@ void pick_physical_device() {
 
   for (size_t i = 0; i < device_count; i++) {
     if (is_device_suitable(&devices[i])) {
-
       physical_device = devices[i];
       break;
     }
