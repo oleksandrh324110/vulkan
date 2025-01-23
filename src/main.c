@@ -1,8 +1,6 @@
-#include <SDL_main.h>
+#include "app/app.h"
 
-#include "./app/app.h"
-
-int main(int argc, char *argv[]) {
-  app_run();
+int main(void) {
+  appRun();
   return 0;
 }
