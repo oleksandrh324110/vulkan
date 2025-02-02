@@ -14,4 +14,5 @@ find_package(Vulkan REQUIRED)
 
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "src/*.c")
 add_executable(main "${SOURCES}")
+add_compile_options(-fsanitize=address)
 target_link_libraries(main cglm glfw Vulkan::Vulkan)

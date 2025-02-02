@@ -4,7 +4,7 @@
 
 #include "window.h"
 
-void windowCreate(Engine *engine) {
+void windowCreate(App *app) {
   if (glfwInit() == GLFW_FALSE) {
     fprintf(stderr, "Failed to initialize GLFW\n");
     exit(1);
@@ -19,7 +19,7 @@ void windowCreate(Engine *engine) {
     exit(1);
   }
 
-  engine->window = window;
+  app->window = window;
 }
 
-void windowDestroy(GLFWwindow *window) { glfwDestroyWindow(window); }
+void windowDestroy(App *app) { glfwDestroyWindow(app->window); }

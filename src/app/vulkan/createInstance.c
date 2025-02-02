@@ -1,4 +1,5 @@
 #include <GLFW/glfw3.h>
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,7 +9,7 @@
 
 #include "vulkan.h"
 
-void vulkanCreateInstance(Engine *engine) {
+void vulkanCreateInstance(App *app) {
   VkApplicationInfo appInfo = {.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO,
                                .pApplicationName = "Hello Triangle",
                                .applicationVersion = VK_MAKE_VERSION(1, 0, 0),
@@ -58,7 +59,7 @@ void vulkanCreateInstance(Engine *engine) {
 
   VkResult result;
 
-  if (vkCreateInstance(&createInfo, NULL, &engine->vkInstance) != VK_SUCCESS) {
+  if (vkCreateInstance(&createInfo, NULL, &app->vkInstance) != VK_SUCCESS) {
     fprintf(stderr, "Failed to create Vulkan instance!\n");
     exit(1);
   }

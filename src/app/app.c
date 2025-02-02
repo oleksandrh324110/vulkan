@@ -1,22 +1,24 @@
 #include <stdbool.h>
 
-#include "../engine/engine.h"
+#include "GLFW/glfw3.h"
 #include "app.h"
+#include "vulkan/vulkan.h"
+#include "window/window.h"
 
-Engine engine;
+App appCreate(void) {
+  App app;
+  windowCreate(&app);
+  vulkanInit(&app);
+  return app;
+}
 
-static void appInit(void) { engine = engineCreate(); }
-
-static void appMainLoop(void) {
-  while (engineIsRunning(&engine)) {
-    engineUpdate(&engine);
+void appRun(App *app) {
+  while (!glfwWindowShouldClose(app->window)) {
+    glfwPollEvents();
   }
 }
 
-static void appCleanup(void) { engineDestroy(&engine); }
-
-void appRun(void) {
-  appInit();
-  appMainLoop();
-  appCleanup();
+void appDestroy(App *app) {
+  vulkanDestroy(app);
+  windowDestroy(app);
 }

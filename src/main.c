@@ -1,6 +1,8 @@
 #include "app/app.h"
 
 int main(void) {
-  appRun();
+  App app = appCreate();
+  appRun(&app);
+  appDestroy(&app);
   return 0;
 }
