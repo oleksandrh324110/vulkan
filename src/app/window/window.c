@@ -1,8 +1,7 @@
+#include "window.h"
 #include <GLFW/glfw3.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-#include "window.h"
 
 void windowCreate(App *app) {
   if (glfwInit() == GLFW_FALSE) {
@@ -23,3 +22,5 @@ void windowCreate(App *app) {
 }
 
 void windowDestroy(App *app) { glfwDestroyWindow(app->window); }
+
+bool windowShouldClose(App *app) { return glfwWindowShouldClose(app->window); }

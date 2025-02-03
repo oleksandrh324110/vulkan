@@ -12,13 +12,13 @@ App appCreate(void) {
   return app;
 }
 
-void appRun(App *app) {
-  while (!glfwWindowShouldClose(app->window)) {
-    glfwPollEvents();
-  }
-}
-
 void appDestroy(App *app) {
   vulkanDestroy(app);
   windowDestroy(app);
+}
+
+void appRun(App *app) {
+  while (!windowShouldClose(app)) {
+    glfwPollEvents();
+  }
 }

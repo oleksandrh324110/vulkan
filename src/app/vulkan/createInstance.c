@@ -1,3 +1,4 @@
+#include "vulkan.h"
 #include <GLFW/glfw3.h>
 #include <stdbool.h>
 #include <stdint.h>
@@ -5,9 +6,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <vulkan/vulkan.h>
-#include <vulkan/vulkan_core.h>
-
-#include "vulkan.h"
 
 void vulkanCreateInstance(App *app) {
   VkApplicationInfo appInfo = {.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO,

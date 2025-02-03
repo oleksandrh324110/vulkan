@@ -9,5 +9,5 @@ typedef struct App {
 } App;
 
 App appCreate(void);
-void appRun(App *app);
 void appDestroy(App *app);
+void appRun(App *app);
