@@ -1,8 +1,12 @@
 #pragma once
 
-#include "../app.h"
+#include <vulkan/vulkan_core.h>
 
-void vulkanInit(App *app);
-void vulkanCreateInstance(App *app);
-void setupDebugMessenger(App *app);
-void vulkanDestroy(App *app);
+typedef struct Vulkan {
+  VkInstance instance;
+} Vulkan;
+
+Vulkan vulkanCreate();
+VkInstance vulkanCreateInstance();
+void setupDebugMessenger(Vulkan *this);
+void vulkanDestroy(Vulkan *this);

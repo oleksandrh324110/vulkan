@@ -1,11 +1,12 @@
 #pragma once
 
-#include "GLFW/glfw3.h"
+#include "vulkan/vulkan.h"
+#include "window/window.h"
 #include <vulkan/vulkan.h>
 
 typedef struct App {
-  VkInstance vkInstance;
-  GLFWwindow *window;
+  Vulkan vulkan;
+  Window window;
 } App;
 
 App appCreate(void);

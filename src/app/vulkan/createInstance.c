@@ -7,7 +7,7 @@
 #include <string.h>
 #include <vulkan/vulkan.h>
 
-void vulkanCreateInstance(App *app) {
+VkInstance vulkanCreateInstance() {
   VkApplicationInfo appInfo = {.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO,
                                .pApplicationName = "Hello Triangle",
                                .applicationVersion = VK_MAKE_VERSION(1, 0, 0),
@@ -19,10 +19,18 @@ void vulkanCreateInstance(App *app) {
   const char **glfwExtensions;
   glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
 
+  for (size_t i = 0; i < glfwExtensionCount; i++)
+    printf("Required extension: %s\n", glfwExtensions[i]);
+  putchar('\n');
+
   uint32_t extensionCount = 0;
   vkEnumerateInstanceExtensionProperties(NULL, &extensionCount, NULL);
   VkExtensionProperties extensions[extensionCount];
   vkEnumerateInstanceExtensionProperties(NULL, &extensionCount, extensions);
+
+  for (size_t i = 0; i < extensionCount; i++)
+    printf("Available extension: %s\n", extensions[i].extensionName);
+  putchar('\n');
 
   const size_t requiredExtensionsCount = glfwExtensionCount + 1;
   const char *requiredExtensions[requiredExtensionsCount];
@@ -55,10 +63,10 @@ void vulkanCreateInstance(App *app) {
       .flags = VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR,
       .enabledLayerCount = 0};
 
-  VkResult result;
-
-  if (vkCreateInstance(&createInfo, NULL, &app->vkInstance) != VK_SUCCESS) {
+  VkInstance instance;
+  if (vkCreateInstance(&createInfo, NULL, &instance) != VK_SUCCESS) {
     fprintf(stderr, "Failed to create Vulkan instance!\n");
     exit(1);
   }
+  return instance;
 }

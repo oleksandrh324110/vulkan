@@ -3,5 +3,8 @@
 #include <stdint.h>
 #include <vulkan/vulkan.h>
 
-void vulkanInit(App *app) { vulkanCreateInstance(app); }
-void vulkanDestroy(App *app) { vkDestroyInstance(app->vkInstance, NULL); }
+Vulkan vulkanCreate() { return (Vulkan){.instance = vulkanCreateInstance()}; }
+
+void vulkanDestroy(Vulkan *vulkan) {
+  vkDestroyInstance(vulkan->instance, NULL);
+}

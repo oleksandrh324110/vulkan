@@ -8,9 +8,9 @@ set(CMAKE_BUILD_TYPE Debug)
 
 project(vulkan C)
 
+find_package(Vulkan REQUIRED)
 add_subdirectory("lib/glfw")
 add_subdirectory("lib/cglm")
-find_package(Vulkan REQUIRED)
 
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "src/*.c")
 add_executable(main "${SOURCES}")
