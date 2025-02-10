@@ -1,9 +1,8 @@
-#include <stdbool.h>
-
-#include "GLFW/glfw3.h"
 #include "app.h"
-#include "vulkan/vulkan.h"
+#include "renderer/renderer.h"
 #include "window/window.h"
+#include <GLFW/glfw3.h>
+#include <stdbool.h>
 
 static void keymapCallback(App *app) {
   if (glfwGetKey(app->window.handle, GLFW_KEY_Q))
@@ -11,11 +10,11 @@ static void keymapCallback(App *app) {
 }
 
 App appCreate(void) {
-  return (App){.vulkan = vulkanCreate(), .window = windowCreate()};
+  return (App){.renderer = rendererCreate(), .window = windowCreate()};
 }
 
 void appDestroy(App *app) {
-  vulkanDestroy(&app->vulkan);
+  rendererDestroy(&app->renderer);
   windowDestroy(&app->window);
 }
 

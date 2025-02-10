@@ -1,11 +1,11 @@
 #pragma once
 
-#include "vulkan/vulkan.h"
+#include "renderer/renderer.h"
 #include "window/window.h"
 #include <vulkan/vulkan.h>
 
 typedef struct App {
-  Vulkan vulkan;
+  Renderer renderer;
   Window window;
 } App;
 
